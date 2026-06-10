@@ -1,7 +1,7 @@
 use sqlx::PgPool;
 use uuid::Uuid;
 
-use crate::model::tasks::{CreateTaskRequest, Task};
+use crate::model::tasks::{CreateTaskRequest, Task, TaskStatus};
 
 pub struct TaskRepository;
 

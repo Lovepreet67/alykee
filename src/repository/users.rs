@@ -1,7 +1,7 @@
 use sqlx::PgPool;
 use uuid::Uuid;
 
-use crate::model::users::{CreateUserRequest, UserResponse};
+use crate::model::users::{CreateUserRequest, User, UserResponse, UserRole};
 
 pub struct UserRepository;
 
@@ -12,7 +12,7 @@ impl UserRepository {
         hashed_password: String,
     ) -> Result<UserResponse, sqlx::Error> {
         let user = sqlx::query_as!(
-            User,
+            UserResponse,
             r#"
             INSERT INTO users (
                 full_name,
@@ -31,7 +31,6 @@ impl UserRepository {
                 full_name,
                 email,
                 role as "role: UserRole",
-                hashed_password,
                 created_at
             "#,
             req.full_name,
@@ -45,10 +44,7 @@ impl UserRepository {
         Ok(user)
     }
 
-    pub async fn find_by_email(
-        pool: &PgPool,
-        email: &str,
-    ) -> Result<Option<UserResponse>, sqlx::Error> {
+    pub async fn find_by_email(pool: &PgPool, email: &str) -> Result<Option<User>, sqlx::Error> {
         let user = sqlx::query_as!(
             User,
             r#"
@@ -70,7 +66,7 @@ impl UserRepository {
         Ok(user)
     }
 
-    pub async fn find_by_id(pool: &PgPool, id: Uuid) -> Result<Option<UserResponse>, sqlx::Error> {
+    pub async fn find_by_id(pool: &PgPool, id: Uuid) -> Result<Option<User>, sqlx::Error> {
         let user = sqlx::query_as!(
             User,
             r#"

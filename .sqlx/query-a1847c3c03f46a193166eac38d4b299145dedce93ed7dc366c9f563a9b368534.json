@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n            INSERT INTO users (\n                full_name,\n                email,\n                role,\n                hashed_password\n            )\n            VALUES (\n                $1,\n                $2,\n                $3,\n                $4\n            )\n            RETURNING\n                id,\n                full_name,\n                email,\n                role as \"role: UserRole\",\n                hashed_password,\n                created_at\n            ",
+  "query": "\n            INSERT INTO users (\n                full_name,\n                email,\n                role,\n                hashed_password\n            )\n            VALUES (\n                $1,\n                $2,\n                $3,\n                $4\n            )\n            RETURNING\n                id,\n                full_name,\n                email,\n                role as \"role: UserRole\",\n                created_at\n            ",
   "describe": {
     "columns": [
       {
@@ -35,11 +35,6 @@
       },
       {
         "ordinal": 4,
-        "name": "hashed_password",
-        "type_info": "Varchar"
-      },
-      {
-        "ordinal": 5,
         "name": "created_at",
         "type_info": "Timestamptz"
       }
@@ -67,9 +62,8 @@
       false,
       false,
       false,
-      false,
       false
     ]
   },
-  "hash": "bcf285ea44d022bd355a0b14fa6fdf13c49910bbe2adc6ad50fbe54429aff5a7"
+  "hash": "a1847c3c03f46a193166eac38d4b299145dedce93ed7dc366c9f563a9b368534"
 }

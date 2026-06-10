@@ -5,9 +5,16 @@ edition = "2024"
 
 [dependencies]
 axum = "0.8.9"
+bcrypt = "0.19.1"
 chrono = { version = "0.4.45", features = ["serde"] }
-jsonwebtoken = "10.4.0"
+dotenv = "0.15.0"
+jsonwebtoken = { version = "10.4.0", features = ["rust_crypto"] }
 serde = "1.0.228"
-sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio"] }
+sqlx = { version = "0.8.6", features = [
+    "postgres",
+    "runtime-tokio",
+    "uuid",
+    "chrono",
+] }
 tokio = { version = "1.52.3", features = ["full"] }
 uuid = { version = "1.23.3", features = ["serde"] }
