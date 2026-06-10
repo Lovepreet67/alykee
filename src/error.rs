@@ -57,25 +57,41 @@ impl Default for APIError {
 
 // TODO: Panding implementations
 impl From<BcryptError> for APIError {
-    fn from(value: BcryptError) -> Self {
-        APIError::default()
+    fn from(_: BcryptError) -> Self {
+        APIError::new(
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Failed to process password.",
+            "BCRYPT_ERROR",
+        )
     }
 }
 
 impl From<sqlx::Error> for APIError {
-    fn from(value: sqlx::Error) -> Self {
-        APIError::default()
+    fn from(_: sqlx::Error) -> Self {
+        APIError::new(
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Database operation failed.",
+            "DATABASE_ERROR",
+        )
     }
 }
 
 impl From<jsonwebtoken::errors::Error> for APIError {
-    fn from(value: jsonwebtoken::errors::Error) -> Self {
-        APIError::default()
+    fn from(_: jsonwebtoken::errors::Error) -> Self {
+        APIError::new(
+            StatusCode::UNAUTHORIZED,
+            "Invalid or expired authentication token.",
+            "INVALID_TOKEN",
+        )
     }
 }
 
 impl From<std::env::VarError> for APIError {
-    fn from(value: std::env::VarError) -> Self {
-        APIError::default()
+    fn from(_: std::env::VarError) -> Self {
+        APIError::new(
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Server configuration error.",
+            "ENVIRONMENT_VARIABLE_MISSING",
+        )
     }
 }
