@@ -1,6 +1,8 @@
-use std::env;
-
-use axum::{Json, http::StatusCode, response::IntoResponse};
+use axum::{
+    Json,
+    http::{StatusCode, header::ToStrError},
+    response::IntoResponse,
+};
 use bcrypt::BcryptError;
 use serde::Serialize;
 
@@ -40,7 +42,7 @@ impl From<APIError> for ErrorResponse {
 
 impl IntoResponse for APIError {
     fn into_response(self) -> axum::response::Response {
-        return (self.status_code, Json(ErrorResponse::from(self))).into_response();
+        (self.status_code, Json(ErrorResponse::from(self))).into_response()
     }
 }
 
@@ -93,5 +95,56 @@ impl From<std::env::VarError> for APIError {
             "Server configuration error.",
             "ENVIRONMENT_VARIABLE_MISSING",
         )
+    }
+}
+
+impl From<lettre::address::AddressError> for APIError {
+    fn from(_: lettre::address::AddressError) -> Self {
+        APIError::new(
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Error while generating the email address",
+            "EMAIL_ADDRESS_ERROR",
+        )
+    }
+}
+
+impl From<lettre::error::Error> for APIError {
+    fn from(_: lettre::error::Error) -> Self {
+        APIError::new(
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Error while generating the email address",
+            "EMAIL_ADDRESS_ERROR",
+        )
+    }
+}
+impl From<redis::RedisError> for APIError {
+    fn from(val: redis::RedisError) -> Self {
+        eprintln!("{:?}", val);
+        APIError {
+            status_code: StatusCode::INTERNAL_SERVER_ERROR,
+            message: "Error from redis".into(),
+            error: "Error from redis".into(),
+        }
+    }
+}
+
+impl From<lettre::transport::smtp::Error> for APIError {
+    fn from(value: lettre::transport::smtp::Error) -> Self {
+        eprintln!("{:?}", value);
+        APIError {
+            status_code: StatusCode::INTERNAL_SERVER_ERROR,
+            message: "Error from mailing service".into(),
+            error: "Error from service".into(),
+        }
+    }
+}
+
+impl From<ToStrError> for APIError {
+    fn from(_: ToStrError) -> Self {
+        APIError {
+            status_code: StatusCode::BAD_REQUEST,
+            message: "Invalid String provided".into(),
+            error: "INVALID_STRING".into(),
+        }
     }
 }

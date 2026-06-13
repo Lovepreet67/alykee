@@ -12,6 +12,7 @@ methods for:
     - User lookup. 
     - Task creation. 
     - Listing tasks by user ID.
+    - README.md file
 Implementations for From<T> for APIError
 
 This summary reflects only the current chat context.

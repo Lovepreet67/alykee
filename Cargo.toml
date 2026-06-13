@@ -4,12 +4,18 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+lettre = { version = "0.11.22", features = [
+    "builder",
+    "smtp-transport",
+    "tokio1",
+    "tokio1-native-tls",
+] }
+serde = "1.0.228"
 axum = "0.8.9"
 bcrypt = "0.19.1"
 chrono = { version = "0.4.45", features = ["serde"] }
 dotenv = "0.15.0"
 jsonwebtoken = { version = "10.4.0", features = ["rust_crypto"] }
-serde = "1.0.228"
 sqlx = { version = "0.8.6", features = [
     "postgres",
     "runtime-tokio",
@@ -17,4 +23,6 @@ sqlx = { version = "0.8.6", features = [
     "chrono",
 ] }
 tokio = { version = "1.52.3", features = ["full"] }
-uuid = { version = "1.23.3", features = ["serde"] }
+uuid = { version = "1.23.3", features = ["serde", "v4"] }
+rand = { version = "0.10.1", features = ["thread_rng"] }
+redis = { version = "1.2.2", features = ["aio", "tokio-comp"] }

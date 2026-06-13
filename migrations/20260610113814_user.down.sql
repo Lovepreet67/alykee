@@ -1,4 +1,6 @@
 -- Add down migration script here
 
+drop table task;
 drop table users;
-drop table tasks;
+drop type user_role;
+drop type task_status;

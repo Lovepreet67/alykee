@@ -4,7 +4,7 @@ use crate::{
     error::APIError,
     model::{
         tasks::{CreateTaskRequest, Task},
-        users::{CreateUserRequest, User, UserResponse},
+        users::{CreateUserRequest, UserResponse},
     },
     repository::{tasks::TaskRepository, users::UserRepository},
     service::auth::Claims,

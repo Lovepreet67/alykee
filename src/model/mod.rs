@@ -1,7 +1,7 @@
 use serde::Serialize;
-use sqlx::FromRow;
 
 pub mod auth;
+pub mod health_check;
 pub mod tasks;
 pub mod users;
 
@@ -11,4 +11,10 @@ where
     T: Serialize,
 {
     pub list: Vec<T>,
+}
+
+#[allow(unused)]
+#[derive(Serialize)]
+pub struct GeneralResponse {
+    pub message: String,
 }

@@ -57,11 +57,11 @@ pub fn verify_jwt(token: &str) -> Result<Claims, APIError> {
         &Validation::default(),
     )
     .map_err(|_e| {
-        return APIError::new(
+        APIError::new(
             StatusCode::UNAUTHORIZED,
             "Invalid Jwt token",
             "INVALID_TOKEN",
-        );
+        )
     })?;
 
     Ok(token_data.claims)

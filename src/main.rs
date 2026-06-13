@@ -1,12 +1,15 @@
 use std::env;
 
-use axum::Router;
 use dotenv::dotenv;
-use sqlx::{PgPool, Postgres, pool::PoolOptions};
+use sqlx::PgPool;
 use uuid::Uuid;
 
 use crate::{
-    error::APIError, model::users::UserRole, repository::users::UserRepository, router::get_router,
+    error::APIError,
+    model::users::UserRole,
+    repository::users::UserRepository,
+    router::get_router,
+    service::{db::get_db_pool, redis::get_redis_client},
     state::AppState,
 };
 
@@ -18,6 +21,7 @@ mod repository;
 mod router;
 mod service;
 mod state;
+mod utilities;
 // this function will create the admin user
 const ROOT_USER_ID: &str = "00000000-0000-0000-0000-000000000001";
 
@@ -72,14 +76,10 @@ pub async fn init(pool: &PgPool) -> Result<(), APIError> {
 #[tokio::main]
 async fn main() {
     dotenv().ok();
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL is rqd");
-    let pool = PoolOptions::<Postgres>::new()
-        .max_connections(5)
-        .connect(&database_url)
-        .await
-        .expect("Connection to database failed please check you connection");
+    let pool = get_db_pool().await;
     init(&pool).await.expect("Error during init");
-    let state = AppState { pool };
+    let redis_client = get_redis_client();
+    let state = AppState { pool, redis_client };
     let router = get_router();
     let state_router = router.with_state(state);
 

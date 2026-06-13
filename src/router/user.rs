@@ -4,7 +4,7 @@ use axum::{
 };
 
 use crate::{
-    controller::user::{get_tasks, login},
+    controller::user::{get_tasks, login, verify_otp},
     middleware::is_authenticated::is_authenticated,
     state::AppState,
 };
@@ -15,5 +15,6 @@ pub fn get_user_router() -> Router<AppState> {
         .layer(middleware::from_fn(is_authenticated));
     axum::Router::new()
         .route("/login", post(login))
+        .route("/verify-otp", post(verify_otp))
         .merge(protected)
 }
